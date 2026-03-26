@@ -1,0 +1,28 @@
+### 1. Criar um Usuário (POST)
+# Lembrando que o situationId 1 é "Ativo" (que criamos no Seed)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "name": "João da Silva",
+  "email": "joao@email.com",
+  "situationId": 1
+}
+
+### 2. Listar Usuários com Paginação (GET)
+GET http://localhost:3000/api/users?page=1&limit=5
+
+
+### 3. Criar um Produto (POST)
+# productCategoryId 1 = Eletrônicos | productSituationId 1 = Disponível
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+  "name": "Monitor Gamer 24 polegadas",
+  "productCategoryId": 1,
+  "productSituationId": 1
+}
+
+### 4. Listar Produtos com Paginação (GET)
+GET http://localhost:3000/api/products
