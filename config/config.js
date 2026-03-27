@@ -7,8 +7,9 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT,
+    migrationStorageTableName: 'migrations',
     define: {
-      timestamps: true // Habilita o uso de createdAt e updatedAt automaticamente
+      timestamps: true
     }
   }
 };

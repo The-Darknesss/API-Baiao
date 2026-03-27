@@ -1,75 +1,51 @@
-const { User, Situation } = require('../models');
-const PaginationService = require('../services/PaginationService'); // <--- Adicione esta linha
+const userService = require('../services/UserService');
 
 module.exports = {
-  // CREATE - Criar usuário
   async create(req, res) {
     try {
-      const { name, email, situationId } = req.body;
-      const user = await User.create({ name, email, situationId });
+      const user = await userService.createUser(req.body);
       return res.status(201).json(user);
     } catch (error) {
+      // Retorna 400 (Bad Request) para erros de validação
       return res.status(400).json({ error: error.message });
     }
   },
 
-// READ - Listar todos com Paginação via Service
   async getAll(req, res) {
     try {
-      const result = await PaginationService.paginate(User, req, {
-        include: [{ model: Situation, as: 'situation' }],
-        order: [['createdAt', 'DESC']]
-      });
-
+      const result = await userService.getAllUsers(req);
       return res.json(result);
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ error: 'Erro interno no servidor.' });
     }
   },
 
-  // READ - Buscar por ID
   async getById(req, res) {
     try {
-      const { id } = req.params;
-      const user = await User.findByPk(id, {
-        include: [{ model: Situation, as: 'situation' }]
-      });
-
-      if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+      const user = await userService.getUserById(req.params.id);
       return res.json(user);
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(404).json({ error: error.message });
     }
   },
 
-  // UPDATE - Atualizar usuário
   async update(req, res) {
     try {
-      const { id } = req.params;
-      const { name, email, situationId } = req.body;
-
-      const user = await User.findByPk(id);
-      if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
-
-      await user.update({ name, email, situationId });
+      const user = await userService.updateUser(req.params.id, req.body);
       return res.json(user);
     } catch (error) {
-      return res.status(400).json({ error: error.message });
+      // Se o erro for "Usuário não encontrado", idealmente seria 404, mas simplificamos no catch
+      const status = error.message.includes('não encontrado') ? 404 : 400;
+      return res.status(status).json({ error: error.message });
     }
   },
 
-  // DELETE - Deletar usuário
   async delete(req, res) {
     try {
-      const { id } = req.params;
-      const user = await User.findByPk(id);
-      
-      if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
-
-      await user.destroy();
-      return res.status(204).send(); // 204 significa "No Content" (sucesso sem retorno de corpo)
+      await userService.deleteUser(req.params.id);
+      return res.status(204).send(); // 204 = No Content (Sucesso, sem corpo de resposta)
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(404).json({ error: error.message });
     }
   }
 };

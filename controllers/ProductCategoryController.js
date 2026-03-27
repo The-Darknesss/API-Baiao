@@ -1,10 +1,10 @@
-const productService = require('../services/ProductService');
+const categoryService = require('../services/ProductCategoryService');
 
 module.exports = {
   async create(req, res) {
     try {
-      const product = await productService.createProduct(req.body);
-      return res.status(201).json(product);
+      const category = await categoryService.createCategory(req.body);
+      return res.status(201).json(category);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
@@ -12,7 +12,7 @@ module.exports = {
 
   async getAll(req, res) {
     try {
-      const result = await productService.getAllProducts(req);
+      const result = await categoryService.getAllCategories(req);
       return res.json(result);
     } catch (error) {
       return res.status(500).json({ error: 'Erro interno no servidor.' });
@@ -21,8 +21,8 @@ module.exports = {
 
   async getById(req, res) {
     try {
-      const product = await productService.getProductById(req.params.id);
-      return res.json(product);
+      const category = await categoryService.getCategoryById(req.params.id);
+      return res.json(category);
     } catch (error) {
       return res.status(404).json({ error: error.message });
     }
@@ -30,18 +30,18 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const product = await productService.updateProduct(req.params.id, req.body);
-      return res.json(product);
+      const category = await categoryService.updateCategory(req.params.id, req.body);
+      return res.json(category);
     } catch (error) {
-      const status = error.message.includes('não encontrado') ? 404 : 400;
+      const status = error.message.includes('não encontrada') ? 404 : 400;
       return res.status(status).json({ error: error.message });
     }
   },
 
   async delete(req, res) {
     try {
-      await productService.deleteProduct(req.params.id);
-      return res.status(204).send(); 
+      await categoryService.deleteCategory(req.params.id);
+      return res.status(204).send();
     } catch (error) {
       return res.status(404).json({ error: error.message });
     }

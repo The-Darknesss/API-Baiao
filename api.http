@@ -1,6 +1,11 @@
-### 1. Criar um Usuário (POST)
-# Lembrando que o situationId 1 é "Ativo" (que criamos no Seed)
-POST http://localhost:3000/api/users
+@baseUrl = http://localhost:3000/api
+
+### ==========================================
+### 1. USERS (Usuários)
+### ==========================================
+
+### Criar Usuário (POST)
+POST {{baseUrl}}/users
 Content-Type: application/json
 
 {
@@ -9,20 +14,145 @@ Content-Type: application/json
   "situationId": 1
 }
 
-### 2. Listar Usuários com Paginação (GET)
-GET http://localhost:3000/api/users?page=1&limit=5
+### Listar Usuários com Paginação (GET)
+GET {{baseUrl}}/users?page=1&limit=10
 
+### Buscar Usuário por ID (GET)
+GET {{baseUrl}}/users/1
 
-### 3. Criar um Produto (POST)
-# productCategoryId 1 = Eletrônicos | productSituationId 1 = Disponível
-POST http://localhost:3000/api/products
+### Atualizar Usuário (PUT)
+PUT {{baseUrl}}/users/1
 Content-Type: application/json
 
 {
-  "name": "Monitor Gamer 24 polegadas",
+  "name": "João da Silva Editado",
+  "email": "joao.editado@email.com",
+  "situationId": 2
+}
+
+### Deletar Usuário (DELETE)
+DELETE {{baseUrl}}/users/1
+
+
+### ==========================================
+### 2. PRODUCTS (Produtos)
+### ==========================================
+
+### Criar Produto (POST)
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Teclado Mecânico RGB",
   "productCategoryId": 1,
   "productSituationId": 1
 }
 
-### 4. Listar Produtos com Paginação (GET)
-GET http://localhost:3000/api/products
+### Listar Produtos com Paginação (GET)
+GET {{baseUrl}}/products?page=1&limit=10
+
+### Buscar Produto por ID (GET)
+GET {{baseUrl}}/products/1
+
+### Atualizar Produto (PUT)
+PUT {{baseUrl}}/products/1
+Content-Type: application/json
+
+{
+  "name": "Teclado Mecânico RGB V2",
+  "productCategoryId": 2,
+  "productSituationId": 2
+}
+
+### Deletar Produto (DELETE)
+DELETE {{baseUrl}}/products/1
+
+
+### ==========================================
+### 3. SITUATIONS (Situações de Usuário)
+### ==========================================
+
+### Criar Situação (POST) - Lembre-se do 'nameSituation'
+POST {{baseUrl}}/situations
+Content-Type: application/json
+
+{
+  "nameSituation": "Bloqueado"
+}
+
+### Listar Situações (GET)
+GET {{baseUrl}}/situations
+
+### Buscar Situação por ID (GET)
+GET {{baseUrl}}/situations/1
+
+### Atualizar Situação (PUT)
+PUT {{baseUrl}}/situations/1
+Content-Type: application/json
+
+{
+  "nameSituation": "Bloqueado Temporariamente"
+}
+
+### Deletar Situação (DELETE)
+DELETE {{baseUrl}}/situations/1
+
+
+### ==========================================
+### 4. PRODUCT CATEGORIES (Categorias de Produto)
+### ==========================================
+
+### Criar Categoria (POST)
+POST {{baseUrl}}/product-categories
+Content-Type: application/json
+
+{
+  "name": "Periféricos"
+}
+
+### Listar Categorias (GET)
+GET {{baseUrl}}/product-categories
+
+### Buscar Categoria por ID (GET)
+GET {{baseUrl}}/product-categories/1
+
+### Atualizar Categoria (PUT)
+PUT {{baseUrl}}/product-categories/1
+Content-Type: application/json
+
+{
+  "name": "Periféricos Gamer"
+}
+
+### Deletar Categoria (DELETE)
+DELETE {{baseUrl}}/product-categories/1
+
+
+### ==========================================
+### 5. PRODUCT SITUATIONS (Situações de Produto)
+### ==========================================
+
+### Criar Situação de Produto (POST)
+POST {{baseUrl}}/product-situations
+Content-Type: application/json
+
+{
+  "name": "Queima de Estoque"
+}
+
+### Listar Situações de Produto (GET)
+GET {{baseUrl}}/product-situations
+
+### Buscar Situação de Produto por ID (GET)
+GET {{baseUrl}}/product-situations/1
+
+### Atualizar Situação de Produto (PUT)
+PUT {{baseUrl}}/product-situations/1
+Content-Type: application/json
+
+{
+  "name": "Últimas Unidades"
+}
+
+### Deletar Situação de Produto (DELETE)
+DELETE {{baseUrl}}/product-situations/1
