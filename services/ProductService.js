@@ -6,16 +6,20 @@ class ProductService {
   // CREATE
   async createProduct(data) {
     const productEntity = new ProductEntity(data);
-    
+
     if (!productEntity.isValid()) {
-      throw new Error('Dados inválidos. O produto precisa de nome, ID da categoria e ID da situação.');
+      throw new Error('Dados inválidos. O produto precisa de nome, descrição, preço (≥ 0), ID da categoria e ID da situação.');
     }
 
-    // Opcional: Aqui poderíamos verificar se a Categoria e a Situação existem no banco
-    // antes de tentar salvar, mas as Chaves Estrangeiras (Migrations) já barram isso.
+    // Verifica se o slug gerado já existe no banco
+    const slugExists = await Product.findOne({ where: { slug: productEntity.slug } });
+    if (slugExists) throw new Error(`O slug "${productEntity.slug}" já está em uso. Tente um nome diferente para o produto.`);
 
     const newProduct = await Product.create({
       name: productEntity.name,
+      slug: productEntity.slug,
+      description: productEntity.description,
+      price: productEntity.price,
       productCategoryId: productEntity.productCategoryId,
       productSituationId: productEntity.productSituationId
     });
@@ -42,7 +46,7 @@ class ProductService {
         { model: ProductSituation, as: 'productSituation' }
       ]
     });
-    
+
     if (!product) throw new Error('Produto não encontrado.');
     return product;
   }
@@ -57,8 +61,17 @@ class ProductService {
       throw new Error('Dados inválidos. Verifique os campos do produto.');
     }
 
+    // Verifica se o novo slug já pertence a OUTRO produto
+    if (productEntity.slug !== product.slug) {
+      const slugExists = await Product.findOne({ where: { slug: productEntity.slug } });
+      if (slugExists) throw new Error(`O slug "${productEntity.slug}" já está em uso.`);
+    }
+
     await product.update({
       name: productEntity.name,
+      slug: productEntity.slug,
+      description: productEntity.description,
+      price: productEntity.price,
       productCategoryId: productEntity.productCategoryId,
       productSituationId: productEntity.productSituationId
     });
@@ -70,7 +83,7 @@ class ProductService {
   async deleteProduct(id) {
     const product = await Product.findByPk(id);
     if (!product) throw new Error('Produto não encontrado.');
-    
+
     await product.destroy();
     return true;
   }

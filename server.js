@@ -8,6 +8,7 @@ const productRoutes = require('./routes/productRoutes');
 const productCategoryRoutes = require('./routes/productCategoryRoutes');
 const productSituationRoutes = require('./routes/productSituationRoutes');
 const situationRoutes = require('./routes/situationRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 // 2. Inicialização do App
 const app = express();
@@ -15,9 +16,9 @@ const app = express();
 // 3. Middlewares (MUITO importante vir antes das rotas)
 app.use(cors());
 app.use(express.json());
-app.use('/api', productCategoryRoutes)
 
 // 4. Configuração das Rotas
+app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', productRoutes);
 app.use('/api', productCategoryRoutes);
